@@ -2,6 +2,7 @@ package heuristics.neighborhoodSearch;
 
 import heuristics.Neighbor;
 import heuristics.Solution;
+import heuristics.neighborhoodSearch.moves.IMove;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -17,5 +18,5 @@ public abstract class BaseNeighborhoodSearch {
 
     abstract void SearchNeighbors();
 
-    abstract Solution applyMove();
+    abstract Solution applyMove(IMove move);
 }
