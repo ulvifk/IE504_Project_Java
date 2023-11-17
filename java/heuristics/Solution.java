@@ -4,8 +4,10 @@ import data.INode;
 import data.Node;
 import data.Truck;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Solution implements Comparable<Solution> {
     public Map<Truck, List<INode>> routes;
@@ -39,5 +41,12 @@ public class Solution implements Comparable<Solution> {
     @Override
     public int compareTo(Solution other) {
         return Double.compare(this.objective, other.objective);
+    }
+
+    public Solution copy(){
+        Map<Truck, List<INode>> clonedRoutes = this.routes.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, kvp -> new LinkedList<>(kvp.getValue())));
+
+        return new Solution(clonedRoutes, this.depot);
     }
 }
