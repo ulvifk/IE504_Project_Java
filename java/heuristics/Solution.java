@@ -1,8 +1,6 @@
 package heuristics;
 
-import data.INode;
-import data.Node;
-import data.Truck;
+import data.*;
 
 import java.util.HashMap;
 import java.util.LinkedList;
