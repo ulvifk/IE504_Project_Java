@@ -24,7 +24,6 @@ public class Main {
     
     
     public static List<ProblemData> readJsonFiles(String directoryPath) {
-        // read json files from the dataset folder, OpenAI. (2023). ChatGPT [Large language model]. https://chat.openai.com
         List<ProblemData> instances = new ArrayList<>();
         File folder = new File(directoryPath);
         File[] listOfFiles = folder.listFiles();
@@ -51,6 +50,8 @@ public class Main {
     }
     
     private static ProblemData createProblemDataFromJSON(JSONObject jsonObject) {
+        // read json files from the dataset folder and create problem instances
+        // OpenAI. (2023). ChatGPT [Large language model]. https://chat.openai.com
         ProblemData problemData = new ProblemData();
         JSONObject instance = (JSONObject) jsonObject.get("instance");
         JSONObject network = (JSONObject) instance.get("network");
