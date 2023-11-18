@@ -1,7 +1,7 @@
 package heuristics;
 
 import data.INode;
-import data.Node;
+import data.Customer;
 import data.Truck;
 
 import java.util.LinkedList;
@@ -12,9 +12,9 @@ import java.util.stream.Collectors;
 public class Solution implements Comparable<Solution> {
     public Map<Truck, List<INode>> routes;
     public double objective;
-    public final Node depot;
+    public final Customer depot;
 
-    public Solution(Map<Truck, List<INode>> routes, Node depot) {
+    public Solution(Map<Truck, List<INode>> routes, Customer depot) {
         this.routes = routes;
         this.depot = depot;
         calculateObjective();

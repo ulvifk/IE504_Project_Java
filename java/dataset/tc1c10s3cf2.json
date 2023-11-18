@@ -1,0 +1,226 @@
+{
+    "instance": {
+        "info": {
+            "dataset": "Montoya et al. 2016",
+            "name": "tc1c10s3cf2"
+        },
+        "network": {
+            "nodes": [
+                {
+                    "@id": "0",
+                    "@type": "0",
+                    "cx": "98.07",
+                    "cy": "96.66"
+                },
+                {
+                    "@id": "1",
+                    "@type": "1",
+                    "cx": "103.22",
+                    "cy": "4.15",
+                    "@demand": "2"
+                },
+                {
+                    "@id": "2",
+                    "@type": "1",
+                    "cx": "102.14",
+                    "cy": "5.0",
+                    "@demand": "46"
+                },
+                {
+                    "@id": "3",
+                    "@type": "1",
+                    "cx": "104.47",
+                    "cy": "4.16",
+                    "@demand": "40"
+                },
+                {
+                    "@id": "4",
+                    "@type": "1",
+                    "cx": "103.9",
+                    "cy": "6.37",
+                    "@demand": "18"
+                },
+                {
+                    "@id": "5",
+                    "@type": "1",
+                    "cx": "106.66",
+                    "cy": "1.66",
+                    "@demand": "26"
+                },
+                {
+                    "@id": "6",
+                    "@type": "1",
+                    "cx": "110.05",
+                    "cy": "61.37",
+                    "@demand": "25"
+                },
+                {
+                    "@id": "7",
+                    "@type": "1",
+                    "cx": "81.43",
+                    "cy": "26.95",
+                    "@demand": "22"
+                },
+                {
+                    "@id": "8",
+                    "@type": "1",
+                    "cx": "58.25",
+                    "cy": "70.62",
+                    "@demand": "43"
+                },
+                {
+                    "@id": "9",
+                    "@type": "1",
+                    "cx": "71.44",
+                    "cy": "20.7",
+                    "@demand": "19"
+                },
+                {
+                    "@id": "10",
+                    "@type": "1",
+                    "cx": "110.79",
+                    "cy": "107.74",
+                    "@demand": "49"
+                },
+                {
+                    "@id": "11",
+                    "@type": "2",
+                    "cx": "83.69",
+                    "cy": "14.06",
+                    "charging_rate": "500"
+                },
+                {
+                    "@id": "12",
+                    "@type": "2",
+                    "cx": "18.85",
+                    "cy": "12.73",
+                    "charging_rate": "500"
+                },
+                {
+                    "@id": "13",
+                    "@type": "2",
+                    "cx": "8.56",
+                    "cy": "10.96",
+                    "charging_rate": "500"
+                }
+            ],
+            "euclidean": null,
+            "decimals": "14"
+        },
+        "fleet": {
+            "vehicle_profile": {
+                "@type": "0",
+                "departure_node": "0",
+                "arrival_node": "0",
+                "speed_factor": "40",
+                "custom": {
+                    "consumption_rate": "125",
+                    "battery_capacity": "16000",
+                    "charging_functions": {
+                        "function": [
+                            {
+                                "@cs_type": "fast",
+                                "breakpoint": [
+                                    {
+                                        "battery_level": "0",
+                                        "charging_time": "0.0"
+                                    },
+                                    {
+                                        "battery_level": "13600",
+                                        "charging_time": "0.31"
+                                    },
+                                    {
+                                        "battery_level": "15200",
+                                        "charging_time": "0.39"
+                                    },
+                                    {
+                                        "battery_level": "16000",
+                                        "charging_time": "0.51"
+                                    }
+                                ]
+                            },
+                            {
+                                "@cs_type": "slow",
+                                "breakpoint": [
+                                    {
+                                        "battery_level": "0",
+                                        "charging_time": "0.0"
+                                    },
+                                    {
+                                        "battery_level": "13600",
+                                        "charging_time": "1.26"
+                                    },
+                                    {
+                                        "battery_level": "15200",
+                                        "charging_time": "1.54"
+                                    },
+                                    {
+                                        "battery_level": "16000",
+                                        "charging_time": "2.04"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "@cs_type": "fast"
+                },
+                "capacity": "100",
+                "max_travel_distance": 5120.0
+            }
+        },
+        "requests": {
+            "request": [
+                {
+                    "@id": "1",
+                    "@node": "1",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "2",
+                    "@node": "2",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "3",
+                    "@node": "3",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "4",
+                    "@node": "4",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "5",
+                    "@node": "5",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "6",
+                    "@node": "6",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "7",
+                    "@node": "7",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "8",
+                    "@node": "8",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "9",
+                    "@node": "9",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "10",
+                    "@node": "10",
+                    "service_time": "0.5"
+                }
+            ]
+        }
+    }
+}

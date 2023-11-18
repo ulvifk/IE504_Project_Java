@@ -1,0 +1,642 @@
+{
+    "instance": {
+        "info": {
+            "dataset": "Montoya et al. 2016",
+            "name": "tc0c40s8cf0"
+        },
+        "network": {
+            "nodes": [
+                {
+                    "@id": "0",
+                    "@type": "0",
+                    "cx": "66.35",
+                    "cy": "46.7"
+                },
+                {
+                    "@id": "1",
+                    "@type": "1",
+                    "cx": "103.6",
+                    "cy": "32.56",
+                    "@demand": "41"
+                },
+                {
+                    "@id": "2",
+                    "@type": "1",
+                    "cx": "2.43",
+                    "cy": "99.47",
+                    "@demand": "29"
+                },
+                {
+                    "@id": "3",
+                    "@type": "1",
+                    "cx": "13.73",
+                    "cy": "53.82",
+                    "@demand": "27"
+                },
+                {
+                    "@id": "4",
+                    "@type": "1",
+                    "cx": "30.34",
+                    "cy": "92.6",
+                    "@demand": "1"
+                },
+                {
+                    "@id": "5",
+                    "@type": "1",
+                    "cx": "2.19",
+                    "cy": "92.44",
+                    "@demand": "20"
+                },
+                {
+                    "@id": "6",
+                    "@type": "1",
+                    "cx": "48.24",
+                    "cy": "18.8",
+                    "@demand": "5"
+                },
+                {
+                    "@id": "7",
+                    "@type": "1",
+                    "cx": "98.69",
+                    "cy": "103.7",
+                    "@demand": "25"
+                },
+                {
+                    "@id": "8",
+                    "@type": "1",
+                    "cx": "43.04",
+                    "cy": "20.13",
+                    "@demand": "33"
+                },
+                {
+                    "@id": "9",
+                    "@type": "1",
+                    "cx": "66.87",
+                    "cy": "0.21",
+                    "@demand": "18"
+                },
+                {
+                    "@id": "10",
+                    "@type": "1",
+                    "cx": "19.68",
+                    "cy": "35.74",
+                    "@demand": "9"
+                },
+                {
+                    "@id": "11",
+                    "@type": "1",
+                    "cx": "70.34",
+                    "cy": "78.93",
+                    "@demand": "15"
+                },
+                {
+                    "@id": "12",
+                    "@type": "1",
+                    "cx": "12.7",
+                    "cy": "76.68",
+                    "@demand": "24"
+                },
+                {
+                    "@id": "13",
+                    "@type": "1",
+                    "cx": "8.69",
+                    "cy": "14.26",
+                    "@demand": "20"
+                },
+                {
+                    "@id": "14",
+                    "@type": "1",
+                    "cx": "100.97",
+                    "cy": "14.58",
+                    "@demand": "44"
+                },
+                {
+                    "@id": "15",
+                    "@type": "1",
+                    "cx": "101.81",
+                    "cy": "82.43",
+                    "@demand": "19"
+                },
+                {
+                    "@id": "16",
+                    "@type": "1",
+                    "cx": "34.65",
+                    "cy": "74.17",
+                    "@demand": "0"
+                },
+                {
+                    "@id": "17",
+                    "@type": "1",
+                    "cx": "83.7",
+                    "cy": "70.07",
+                    "@demand": "12"
+                },
+                {
+                    "@id": "18",
+                    "@type": "1",
+                    "cx": "83.66",
+                    "cy": "18.69",
+                    "@demand": "15"
+                },
+                {
+                    "@id": "19",
+                    "@type": "1",
+                    "cx": "13.63",
+                    "cy": "1.03",
+                    "@demand": "5"
+                },
+                {
+                    "@id": "20",
+                    "@type": "1",
+                    "cx": "0.07",
+                    "cy": "10.85",
+                    "@demand": "18"
+                },
+                {
+                    "@id": "21",
+                    "@type": "1",
+                    "cx": "22.82",
+                    "cy": "110.76",
+                    "@demand": "3"
+                },
+                {
+                    "@id": "22",
+                    "@type": "1",
+                    "cx": "34.44",
+                    "cy": "118.78",
+                    "@demand": "41"
+                },
+                {
+                    "@id": "23",
+                    "@type": "1",
+                    "cx": "49.33",
+                    "cy": "6.52",
+                    "@demand": "44"
+                },
+                {
+                    "@id": "24",
+                    "@type": "1",
+                    "cx": "116.98",
+                    "cy": "17.23",
+                    "@demand": "32"
+                },
+                {
+                    "@id": "25",
+                    "@type": "1",
+                    "cx": "91.31",
+                    "cy": "34.02",
+                    "@demand": "20"
+                },
+                {
+                    "@id": "26",
+                    "@type": "1",
+                    "cx": "9.36",
+                    "cy": "8.8",
+                    "@demand": "6"
+                },
+                {
+                    "@id": "27",
+                    "@type": "1",
+                    "cx": "90.84",
+                    "cy": "7.77",
+                    "@demand": "3"
+                },
+                {
+                    "@id": "28",
+                    "@type": "1",
+                    "cx": "91.46",
+                    "cy": "18.12",
+                    "@demand": "4"
+                },
+                {
+                    "@id": "29",
+                    "@type": "1",
+                    "cx": "85.86",
+                    "cy": "92.32",
+                    "@demand": "43"
+                },
+                {
+                    "@id": "30",
+                    "@type": "1",
+                    "cx": "29.69",
+                    "cy": "53.99",
+                    "@demand": "36"
+                },
+                {
+                    "@id": "31",
+                    "@type": "1",
+                    "cx": "96.71",
+                    "cy": "105.59",
+                    "@demand": "50"
+                },
+                {
+                    "@id": "32",
+                    "@type": "1",
+                    "cx": "119.57",
+                    "cy": "30.18",
+                    "@demand": "21"
+                },
+                {
+                    "@id": "33",
+                    "@type": "1",
+                    "cx": "27.18",
+                    "cy": "92.94",
+                    "@demand": "33"
+                },
+                {
+                    "@id": "34",
+                    "@type": "1",
+                    "cx": "5.03",
+                    "cy": "25.14",
+                    "@demand": "24"
+                },
+                {
+                    "@id": "35",
+                    "@type": "1",
+                    "cx": "16.05",
+                    "cy": "52.15",
+                    "@demand": "15"
+                },
+                {
+                    "@id": "36",
+                    "@type": "1",
+                    "cx": "30.51",
+                    "cy": "3.99",
+                    "@demand": "24"
+                },
+                {
+                    "@id": "37",
+                    "@type": "1",
+                    "cx": "96.08",
+                    "cy": "94.6",
+                    "@demand": "2"
+                },
+                {
+                    "@id": "38",
+                    "@type": "1",
+                    "cx": "39.12",
+                    "cy": "83.35",
+                    "@demand": "38"
+                },
+                {
+                    "@id": "39",
+                    "@type": "1",
+                    "cx": "101.25",
+                    "cy": "66.55",
+                    "@demand": "34"
+                },
+                {
+                    "@id": "40",
+                    "@type": "1",
+                    "cx": "31.42",
+                    "cy": "70.02",
+                    "@demand": "10"
+                },
+                {
+                    "@id": "41",
+                    "@type": "2",
+                    "cx": "45.98",
+                    "cy": "101.25",
+                    "charging_rate": "500"
+                },
+                {
+                    "@id": "42",
+                    "@type": "2",
+                    "cx": "109.46",
+                    "cy": "77.4",
+                    "charging_rate": "500"
+                },
+                {
+                    "@id": "43",
+                    "@type": "2",
+                    "cx": "59.33",
+                    "cy": "116.53",
+                    "charging_rate": "500"
+                },
+                {
+                    "@id": "44",
+                    "@type": "2",
+                    "cx": "36.27",
+                    "cy": "42.55",
+                    "charging_rate": "500"
+                },
+                {
+                    "@id": "45",
+                    "@type": "2",
+                    "cx": "81.08",
+                    "cy": "118.6",
+                    "charging_rate": "500"
+                },
+                {
+                    "@id": "46",
+                    "@type": "2",
+                    "cx": "89.45",
+                    "cy": "52.44",
+                    "charging_rate": "500"
+                },
+                {
+                    "@id": "47",
+                    "@type": "2",
+                    "cx": "54.36",
+                    "cy": "37.6",
+                    "charging_rate": "500"
+                },
+                {
+                    "@id": "48",
+                    "@type": "2",
+                    "cx": "53.24",
+                    "cy": "96.49",
+                    "charging_rate": "500"
+                }
+            ],
+            "euclidean": null,
+            "decimals": "14"
+        },
+        "fleet": {
+            "vehicle_profile": {
+                "@type": "0",
+                "departure_node": "0",
+                "arrival_node": "0",
+                "speed_factor": "40",
+                "custom": {
+                    "consumption_rate": "125",
+                    "battery_capacity": "16000",
+                    "charging_functions": {
+                        "function": [
+                            {
+                                "@cs_type": "fast",
+                                "breakpoint": [
+                                    {
+                                        "battery_level": "0",
+                                        "charging_time": "0.0"
+                                    },
+                                    {
+                                        "battery_level": "13600",
+                                        "charging_time": "0.31"
+                                    },
+                                    {
+                                        "battery_level": "15200",
+                                        "charging_time": "0.39"
+                                    },
+                                    {
+                                        "battery_level": "16000",
+                                        "charging_time": "0.51"
+                                    }
+                                ]
+                            },
+                            {
+                                "@cs_type": "normal",
+                                "breakpoint": [
+                                    {
+                                        "battery_level": "0",
+                                        "charging_time": "0.0"
+                                    },
+                                    {
+                                        "battery_level": "13600",
+                                        "charging_time": "0.62"
+                                    },
+                                    {
+                                        "battery_level": "15200",
+                                        "charging_time": "0.77"
+                                    },
+                                    {
+                                        "battery_level": "16000",
+                                        "charging_time": "1.01"
+                                    }
+                                ]
+                            },
+                            {
+                                "@cs_type": "slow",
+                                "breakpoint": [
+                                    {
+                                        "battery_level": "0",
+                                        "charging_time": "0.0"
+                                    },
+                                    {
+                                        "battery_level": "13600",
+                                        "charging_time": "1.26"
+                                    },
+                                    {
+                                        "battery_level": "15200",
+                                        "charging_time": "1.54"
+                                    },
+                                    {
+                                        "battery_level": "16000",
+                                        "charging_time": "2.04"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "@cs_type": "fast"
+                },
+                "capacity": "100",
+                "max_travel_distance": 5120.0
+            }
+        },
+        "requests": {
+            "request": [
+                {
+                    "@id": "1",
+                    "@node": "1",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "2",
+                    "@node": "2",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "3",
+                    "@node": "3",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "4",
+                    "@node": "4",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "5",
+                    "@node": "5",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "6",
+                    "@node": "6",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "7",
+                    "@node": "7",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "8",
+                    "@node": "8",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "9",
+                    "@node": "9",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "10",
+                    "@node": "10",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "11",
+                    "@node": "11",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "12",
+                    "@node": "12",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "13",
+                    "@node": "13",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "14",
+                    "@node": "14",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "15",
+                    "@node": "15",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "16",
+                    "@node": "16",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "17",
+                    "@node": "17",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "18",
+                    "@node": "18",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "19",
+                    "@node": "19",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "20",
+                    "@node": "20",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "21",
+                    "@node": "21",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "22",
+                    "@node": "22",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "23",
+                    "@node": "23",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "24",
+                    "@node": "24",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "25",
+                    "@node": "25",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "26",
+                    "@node": "26",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "27",
+                    "@node": "27",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "28",
+                    "@node": "28",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "29",
+                    "@node": "29",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "30",
+                    "@node": "30",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "31",
+                    "@node": "31",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "32",
+                    "@node": "32",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "33",
+                    "@node": "33",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "34",
+                    "@node": "34",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "35",
+                    "@node": "35",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "36",
+                    "@node": "36",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "37",
+                    "@node": "37",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "38",
+                    "@node": "38",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "39",
+                    "@node": "39",
+                    "service_time": "0.5"
+                },
+                {
+                    "@id": "40",
+                    "@node": "40",
+                    "service_time": "0.5"
+                }
+            ]
+        }
+    }
+}
