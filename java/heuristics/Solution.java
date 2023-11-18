@@ -1,9 +1,10 @@
 package heuristics;
 
 import data.INode;
-import data.Customer;
+import data.Node;
 import data.Truck;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -11,13 +12,16 @@ import java.util.stream.Collectors;
 
 public class Solution implements Comparable<Solution> {
     public Map<Truck, List<INode>> routes;
+    public Map<Truck, List<TruckResourceCache>> resourceCache;
     public double objective;
     public final Customer depot;
 
     public Solution(Map<Truck, List<INode>> routes, Customer depot) {
         this.routes = routes;
         this.depot = depot;
-        calculateObjective();
+        this.resourceCache = new HashMap<>();
+
+        update();
     }
 
     public void calculateObjective() {
@@ -48,5 +52,53 @@ public class Solution implements Comparable<Solution> {
                 .collect(Collectors.toMap(Map.Entry::getKey, kvp -> new LinkedList<>(kvp.getValue())));
 
         return new Solution(clonedRoutes, this.depot);
+    }
+
+    private void calculateResourceCache(){
+        this.routes.keySet().forEach(truck -> this.resourceCache.put(truck, new LinkedList<>()));
+
+        for (var kvp : this.routes.entrySet()) {
+            var truck = kvp.getKey();
+            var route = kvp.getValue();
+
+            double batteryLevel = truck.batteryCapacity();
+            double remainingCapacity = truck.capacity();
+            INode currentNode = this.depot;
+            for (var node : route) {
+                if (node instanceof Node customer){
+                    var consumption = truck.batteryConsumption(currentNode.distanceTo(customer));
+                    batteryLevel -= consumption;
+                    remainingCapacity -= customer.demand();
+                }
+                else {
+                    batteryLevel = truck.batteryCapacity();
+                }
+
+                this.resourceCache.get(truck)
+                        .add(new TruckResourceCache(truck, node, batteryLevel, remainingCapacity));
+                currentNode = node;
+            }
+        }
+    }
+
+    public boolean isFeasible(){
+        return checkBatteryFeasibility() && checkCapacityFeasibility();
+    }
+
+    private boolean checkBatteryFeasibility(){
+        return resourceCache.values().stream()
+                .flatMap(List::stream)
+                .anyMatch(cache -> cache.batteryAtNode() < 0);
+    }
+
+    private boolean checkCapacityFeasibility(){
+        return resourceCache.values().stream()
+                .flatMap(List::stream)
+                .anyMatch(cache -> cache.capacityAfterServingNode() < 0);
+    }
+
+    public void update(){
+        calculateResourceCache();
+        calculateObjective();
     }
 }

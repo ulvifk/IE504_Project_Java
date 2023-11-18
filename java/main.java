@@ -16,13 +16,10 @@ public class Main {
 
 
     public static void main(String[] args) {
-        System.out.println("main started");
-        List<ProblemData> instances = readJsonFiles("java/dataset"); 
-        
-        System.out.println("main ended"); 
+        System.out.println("Hello World!");
     }
-    
-    
+
+
     public static List<ProblemData> readJsonFiles(String directoryPath) {
         List<ProblemData> instances = new ArrayList<>();
         File folder = new File(directoryPath);
@@ -48,7 +45,7 @@ public class Main {
         }
         return instances;
     }
-    
+
     private static ProblemData createProblemDataFromJSON(JSONObject jsonObject) {
         // read json files from the dataset folder and create problem instances
         // OpenAI. (2023). ChatGPT [Large language model]. https://chat.openai.com
@@ -56,7 +53,7 @@ public class Main {
         JSONObject instance = (JSONObject) jsonObject.get("instance");
         JSONObject network = (JSONObject) instance.get("network");
         JSONArray nodesArray = (JSONArray) network.get("nodes");
-       
+
         // read depot, customers, stations
         for (Object nodeObj : nodesArray){
             JSONObject nodeJSON = (JSONObject) nodeObj;
