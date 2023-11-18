@@ -2,9 +2,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+import heuristics.GreedyHeuristic;
+import heuristics.tabuSearch.TabuSearch;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -14,7 +15,14 @@ import data.*;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        var problems = readJsonFiles("./java/dataset");
+        var problem = problems.get(0);
+
+        var greedyHeuristic = new GreedyHeuristic(problem);
+        greedyHeuristic.run();
+        greedyHeuristic.solution.isFeasible();
+
+        var tabuSearch = new TabuSearch(problem, greedyHeuristic.solution, 5);
     }
 
 
