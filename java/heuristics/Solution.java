@@ -63,7 +63,7 @@ public class Solution implements Comparable<Solution> {
             double remainingCapacity = truck.capacity();
             INode currentNode = this.depot;
             for (var node : route) {
-                if (node instanceof Node customer){
+                if (node instanceof Customer customer){
                     var consumption = truck.batteryConsumption(currentNode.distanceTo(customer));
                     batteryLevel -= consumption;
                     remainingCapacity -= customer.demand();
