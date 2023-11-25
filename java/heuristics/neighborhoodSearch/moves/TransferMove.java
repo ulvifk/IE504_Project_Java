@@ -13,7 +13,6 @@ public record TransferMove(Truck fromTruck, Truck toTruck, INode node, int toInd
         var other = (TransferMove) obj;
         return this.fromTruck.equals(other.fromTruck) &&
                 this.toTruck.equals(other.toTruck) &&
-                this.node.equals(other.node) &&
-                this.toIndex == other.toIndex;
+                this.node.equals(other.node);
     }
 }
