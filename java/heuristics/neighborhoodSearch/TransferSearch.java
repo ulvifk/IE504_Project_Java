@@ -10,6 +10,7 @@ public class TransferSearch extends BaseNeighborhoodSearch {
 
     public TransferSearch(Solution solution) {
         super(solution);
+        SearchNeighbors();
     }
 
     protected void SearchNeighbors() {

@@ -12,6 +12,7 @@ public class IntraSwapSearch extends BaseNeighborhoodSearch {
 
     public IntraSwapSearch(Solution solution) {
         super(solution);
+        SearchNeighbors();
     }
 
     protected void SearchNeighbors() {

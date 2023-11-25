@@ -12,6 +12,7 @@ public class InterSwapSearch extends BaseNeighborhoodSearch {
 
     public InterSwapSearch(Solution solution) {
         super(solution);
+        SearchNeighbors();
     }
 
     protected void SearchNeighbors() {
@@ -26,8 +27,10 @@ public class InterSwapSearch extends BaseNeighborhoodSearch {
                     var route2 = super.solution.routes.get(truck2);
                     for (var node2 : route2) {
                         var move = new InterSwapMove(truck1, truck2, node1, node2);
+                        var newSolution = applyMove(move);
+                        if (!newSolution.isFeasible()) continue;
 
-
+                        this.neighbors.add(new Neighbor(newSolution, move));
                     }
                 }
             }

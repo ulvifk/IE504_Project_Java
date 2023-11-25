@@ -86,13 +86,13 @@ public class Solution implements Comparable<Solution> {
     private boolean checkBatteryFeasibility(){
         return resourceCache.values().stream()
                 .flatMap(List::stream)
-                .anyMatch(cache -> cache.batteryAtNode() < 0);
+                .allMatch(cache -> cache.batteryAtNode() >= 0);
     }
 
     private boolean checkCapacityFeasibility(){
         return resourceCache.values().stream()
                 .flatMap(List::stream)
-                .anyMatch(cache -> cache.capacityAfterServingNode() < 0);
+                .allMatch(cache -> cache.capacityAfterServingNode() >= 0);
     }
 
     public void update(){
