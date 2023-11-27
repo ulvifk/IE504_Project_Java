@@ -22,7 +22,10 @@ public class Main {
         greedyHeuristic.run();
         greedyHeuristic.solution.isFeasible();
 
-        var tabuSearch = new TabuSearch(problem, greedyHeuristic.solution, 5);
+        //var tabuSearch = new TabuSearch(problem, greedyHeuristic.solution, 5);
+
+        
+
     }
 
 
