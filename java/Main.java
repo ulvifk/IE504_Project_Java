@@ -4,27 +4,34 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import heuristics.GreedyHeuristic;
 import heuristics.tabuSearch.TabuSearch;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import heuristics.*;
+
 import data.*;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         var problems = readJsonFiles("./java/dataset");
         var problem = problems.get(0);
 
         var greedyHeuristic = new GreedyHeuristic(problem);
+        System.out.println("-----------------------------------------------------------------");
+        System.out.println("started greedy heuristic");
         greedyHeuristic.run();
         greedyHeuristic.solution.isFeasible();
-
+        System.out.println(greedyHeuristic.solution.isFeasible());
         //var tabuSearch = new TabuSearch(problem, greedyHeuristic.solution, 5);
-
-        
+        Solution initialSolution = greedyHeuristic.solution;
+        System.out.println("starting simulted annealing...");
+        SimulatedAnnealing SA = new SimulatedAnnealing(1000, 0.01, "geometric", 2, "minT,1", initialSolution);
+        Solution SA_Solution = SA.run();
+        SA_Solution.calculateObjective();
+        System.out.println("First solution:"+initialSolution.objective + "\n"+ " SA solution:" + SA_Solution.objective);
 
     }
 
