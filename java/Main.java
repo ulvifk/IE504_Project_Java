@@ -18,22 +18,25 @@ public class Main {
     public static void main(String[] args) throws Exception {
         var problems = readJsonFiles("./java/dataset");
         var problem = problems.get(0);
+        for(int i =0; i<10; i++){
+            problem = problems.get(i);
+            var greedyHeuristic = new GreedyHeuristic(problem);
+            System.out.println("-----------------------------------------------------------------");
+            System.out.println("started greedy heuristic");
+            greedyHeuristic.run();
+            greedyHeuristic.solution.isFeasible();
+            System.out.println(greedyHeuristic.solution.isFeasible());
+            //var tabuSearch = new TabuSearch(problem, greedyHeuristic.solution, 5);
+            for (int j = 0; j<10; j++){
+                System.out.println("Dataset"+i+", RUN" + j + "...");
+                Solution initialSolution = greedyHeuristic.solution;
+                SimulatedAnnealing SA = new SimulatedAnnealing(50000, 0.01, "geometric", 2, "minT,1", initialSolution);
+                Solution SA_Solution = SA.run(i, j);
+                
+            }
 
-        var greedyHeuristic = new GreedyHeuristic(problem);
-        System.out.println("-----------------------------------------------------------------");
-        System.out.println("started greedy heuristic");
-        greedyHeuristic.run();
-        greedyHeuristic.solution.isFeasible();
-        System.out.println(greedyHeuristic.solution.isFeasible());
-        //var tabuSearch = new TabuSearch(problem, greedyHeuristic.solution, 5);
-        Solution initialSolution = greedyHeuristic.solution;
-        System.out.println("starting simulted annealing...");
-        SimulatedAnnealing SA = new SimulatedAnnealing(1000, 0.01, "geometric", 2, "minT,1", initialSolution);
-        Solution SA_Solution = SA.run();
-        SA_Solution.calculateObjective();
-        System.out.println("First solution:"+initialSolution.objective + "\n"+ " SA solution:" + SA_Solution.objective);
-
-    }
+        }
+            }
 
 
     public static List<ProblemData> readJsonFiles(String directoryPath) {

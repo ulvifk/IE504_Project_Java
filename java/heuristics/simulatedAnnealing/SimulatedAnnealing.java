@@ -1,16 +1,23 @@
-    import heuristics.Solution;
-    import data.INode;
-    import data.Truck;
+import heuristics.Solution;
+import data.INode;
+import data.Truck;
 
-    import java.util.List;
-    import java.util.Map;
-    import java.util.Random;
-    import java.util.ArrayList;
-    import java.util.Collections;
-    import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 
-    import java.time.Duration;
-    import java.time.Instant;
+import java.time.Duration;
+import java.time.Instant;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
     public class SimulatedAnnealing {
 
@@ -31,40 +38,57 @@
             this.terminationCriteria = terminationCriteria;
             this.initialSolution = initialSolution;
             this.incumbentSolution = initialSolution;
-            System.out.println("Created the SA!");
+            //System.out.println("Created the SA!");
         }
 
 
-        public Solution run() throws Exception{
-            System.out.println("Started run method...");
-            double temperature = this.initialTemperature;
-            int iterNumber = 0;
-            Solution currentSolution = this.initialSolution;
-            Solution incumbentSolution = this.incumbentSolution;
-            initialSolution.calculateObjective();
-            double initialObj = initialSolution.objective;
-            System.out.println("Initial objective:"+ initialObj);
-            while (!checkTerminationCriteria(this.terminationCriteria, temperature, iterNumber)){
-                for(int i = 0; i<this.epochLength; i++){
-                    incumbentSolution.calculateObjective();
-                    double incumbentObj = incumbentSolution.objective;
-                    System.out.println("Iteration:"+ iterNumber+ " epoch:"+ i + "--> T="+ temperature + ", incumbent solution:"+ incumbentObj);
-                    Solution neighborSolution = generateNeighbor("scramble", currentSolution);
-                    if (acceptanceCriteria(neighborSolution, currentSolution, temperature)) {
-                        currentSolution = neighborSolution;
-                        currentSolution.calculateObjective();
+        public Solution run(int dataSetNumber, int runNumber) throws Exception{
+           // System.out.println("Started run method...");
+            long startTime = System.currentTimeMillis();
+            String fileName = "SimulatedAnnealing_dataset_" + dataSetNumber + "_initialT_" + this.initialTemperature +"_epoch_" + this.epochLength + "_run_" + runNumber + ".csv";
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+                double temperature = this.initialTemperature;
+                int iterNumber = 0;
+                Solution currentSolution = this.initialSolution;
+                Solution incumbentSolution = this.incumbentSolution;
+                initialSolution.calculateObjective();
+                double initialObj = initialSolution.objective;
+               // System.out.println("Initial objective:"+ initialObj);
+                while (!checkTerminationCriteria(this.terminationCriteria, temperature, iterNumber)){
+                    for(int i = 0; i<this.epochLength; i++){
                         incumbentSolution.calculateObjective();
-                        if (currentSolution.objective > incumbentSolution.objective) {
-                            incumbentSolution = currentSolution.copy();
+                        double incumbentObj = incumbentSolution.objective;
+                        
+                        writer.write(iterNumber + "," + temperature + "," + currentSolution.objective + "," + incumbentSolution.objective + "\n");
+                        
+                        Solution neighborSolution = generateNeighbor("scramble", currentSolution);
+                        if (acceptanceCriteria(neighborSolution, currentSolution, temperature)) {
+                            currentSolution = neighborSolution;
+                            currentSolution.calculateObjective();
+                            incumbentSolution.calculateObjective();
+                            if (currentSolution.objective < incumbentSolution.objective) {
+                                incumbentSolution = currentSolution.copy();
+                            }
                         }
                     }
+                    temperature = updateTemperature(temperature, this.coolingMethod, this.coolingParameter);
+                    iterNumber++;
                 }
-                temperature = updateTemperature(temperature, this.coolingMethod, this.coolingParameter);
-                iterNumber++;
+                incumbentSolution.calculateObjective();
+                long endTime = System.currentTimeMillis();
+                long totalTime = endTime - startTime;
+                writer.write(""+totalTime+"\n");
+                writer.write(""+initialSolution.objective+"\n");
+
+              //  System.out.println("I am returning " + incumbentSolution.objective);
+                
             }
-            incumbentSolution.calculateObjective();
-            System.out.println("I am returning " + incumbentSolution.objective);
+            catch (IOException e) {
+                e.printStackTrace();
+            }
             return incumbentSolution;
+            
         }
 
         public boolean acceptanceCriteria(Solution currentSolution, Solution newSolution, double temperature) {
@@ -72,21 +96,21 @@
             newSolution.calculateObjective();
             double currentObjective = currentSolution.objective;
             double newObjective = newSolution.objective;
-            System.out.println("    current obj:" + currentObjective + " neighbor obj:"+ newObjective);
-            if (newObjective > currentObjective) {
-                System.out.println("        accept the better solution");
+           // System.out.println("    current obj:" + currentObjective + " neighbor obj:"+ newObjective);
+            if (newObjective < currentObjective) {
+               // System.out.println("        accept the better solution");
                 return true;
             } else {
                 double acceptanceProbability = Math.exp(-(newObjective - currentObjective) / temperature);
                 double randomThreshold = random.nextDouble();
-                System.out.println("        accept p:"+ acceptanceProbability+", random treshold:" + randomThreshold);
+              //  System.out.println("        accept p:"+ acceptanceProbability+", random treshold:" + randomThreshold);
                 return acceptanceProbability > randomThreshold;
             }
         }
         
         private double updateTemperature(double temperature, String coolingMethod, double parameter){
             if ("geometric".equals(coolingMethod)){
-                System.out.println("            I update the temperature :)");
+             //   System.out.println("            I update the temperature :)");
                 return temperature * (1-parameter);
             } else {
                 return -1;
@@ -94,14 +118,13 @@
         }
 
         private Solution generateNeighbor(String neighborhoodMove, Solution initSolution) throws Exception{
-            // inspired from https://www.sciencedirect.com/science/article/pii/S2210650221000729
             Solution initSol = initSolution;
             if ("scramble".equals(neighborhoodMove)){
                     Solution neighborSolution = null;
                     boolean isFeasible = false;
 
                     Instant startTime = Instant.now();
-                    System.out.println("    looking for new neighborhood solution...");
+                 //   System.out.println("    looking for new neighborhood solution...");
                     while(!isFeasible) {
                         List<Truck> truckList = new ArrayList<>(initSol.routes.keySet());
                         Collections.shuffle(truckList);
@@ -126,7 +149,7 @@
                             throw new Exception("No feasible neighbor found within 5 minutes.");
                         }
                     }
-                    System.out.println("    found a new neighborhood solution!");
+                 //   System.out.println("    found a new neighborhood solution!");
                     return neighborSolution;
 
             } else{
