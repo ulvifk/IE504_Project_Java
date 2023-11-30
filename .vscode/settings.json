@@ -1,7 +1,8 @@
 {
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
-        "c:\\Users\\asena\\Downloads\\json-simple-1.1.1.jar"
+        "c:\\Users\\asena\\Downloads\\json-simple-1.1.1.jar",
+        "c:\\gurobi1003\\win64\\lib\\gurobi.jar"
     ],
     "java.configuration.runtimes": [
         {
