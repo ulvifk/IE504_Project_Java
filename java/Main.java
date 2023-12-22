@@ -13,14 +13,23 @@ import org.json.simple.parser.ParseException;
 import heuristics.*;
 
 import data.*;
+import gurobiSolution.ECVRPSolver;
 
 public class Main {
     public static void main(String[] args) throws Exception {
+        
         var problems = readJsonFiles("./java/dataset");
         var problem = problems.get(0);
         for(int i =0; i<10; i++){
             problem = problems.get(i);
-            var greedyHeuristic = new GreedyHeuristic(problem);
+
+            ECVRPSolver solver = new ECVRPSolver(problem);
+            Solution solution = solver.solve();
+
+            System.out.println("Solution is feasible: " + solution.isFeasible());
+            System.out.println("Objective value: " + solution.objective);
+
+            /* var greedyHeuristic = new GreedyHeuristic(problem);
             System.out.println("-----------------------------------------------------------------");
             System.out.println("started greedy heuristic");
             greedyHeuristic.run();
@@ -33,10 +42,10 @@ public class Main {
                 SimulatedAnnealing SA = new SimulatedAnnealing(50000, 0.01, "geometric", 2, "minT,1", initialSolution);
                 Solution SA_Solution = SA.run(i, j);
                 
-            }
+            } */
 
         }
-            }
+    }
 
 
     public static List<ProblemData> readJsonFiles(String directoryPath) {
@@ -69,6 +78,7 @@ public class Main {
         // read json files from the dataset folder and create problem instances
         // OpenAI. (2023). ChatGPT [Large language model]. https://chat.openai.com
         ProblemData problemData = new ProblemData();
+        problemData.dispatchCost = 100;
         JSONObject instance = (JSONObject) jsonObject.get("instance");
         JSONObject network = (JSONObject) instance.get("network");
         JSONArray nodesArray = (JSONArray) network.get("nodes");

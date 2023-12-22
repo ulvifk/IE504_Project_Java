@@ -10,6 +10,7 @@ public class ProblemData {
     public List<Customer> customers;
     public List<Station> stations;
     public TruckParameters truckParameters;
+    public double dispatchCost;
 
     public ProblemData() {
         this.customers = new LinkedList<>();
