@@ -26,7 +26,7 @@ public class IntraSwapSearch extends BaseNeighborhoodSearch {
 
                     var move = new IntraSwapMove(truck, node1, node2);
                     var newSolution = applyMove(move);
-                    if (!newSolution.isFeasible()) continue;
+                    if (!newSolution.isFeasible) continue;
 
                     this.neighbors.add(new Neighbor(newSolution, move));
                 }
@@ -45,7 +45,7 @@ public class IntraSwapSearch extends BaseNeighborhoodSearch {
         var node2 = move.node2();
 
         Collections.swap(route, route.indexOf(node1), route.indexOf(node2));
-        newSolution.update();
+        newSolution.update(truck);
         return newSolution;
     }
 }

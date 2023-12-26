@@ -28,7 +28,7 @@ public class InterSwapSearch extends BaseNeighborhoodSearch {
                     for (var node2 : route2) {
                         var move = new InterSwapMove(truck1, truck2, node1, node2);
                         var newSolution = applyMove(move);
-                        if (!newSolution.isFeasible()) continue;
+                        if (!newSolution.isFeasible) continue;
 
                         this.neighbors.add(new Neighbor(newSolution, move));
                     }
@@ -59,7 +59,7 @@ public class InterSwapSearch extends BaseNeighborhoodSearch {
         route1.add(node1Index, node2);
         route2.add(node2Index, node1);
 
-        newSolution.update();
+        newSolution.update(truck1, truck2);
         return newSolution;
     }
 }

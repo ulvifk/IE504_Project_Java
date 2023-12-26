@@ -26,7 +26,7 @@ public class TransferSearch extends BaseNeighborhoodSearch {
                     for (int i = 0; i < route2.size() + 1; i++) {
                         var move = new TransferMove(truck1, truck2, node, i);
                         var newSolution = applyMove(move);
-                        if (!newSolution.isFeasible()) continue;
+                        if (!newSolution.isFeasible) continue;
 
                         this.neighbors.add(new Neighbor(newSolution, move));
                     }
@@ -47,7 +47,7 @@ public class TransferSearch extends BaseNeighborhoodSearch {
         newSolution.routes.get(fromTruck).remove(node);
         newSolution.routes.get(toTruck).add(toIndex, node);
 
-        newSolution.update();
+        newSolution.update(fromTruck, toTruck);
         return newSolution;
     }
 }

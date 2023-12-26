@@ -13,6 +13,7 @@ public class Solution implements Comparable<Solution> {
     public Map<Truck, List<TruckResourceCache>> resourceCache;
     public double objective;
     public final Customer depot;
+    public boolean isFeasible;
 
     public Solution(Map<Truck, List<INode>> routes, Customer depot) {
         this.routes = routes;
@@ -20,6 +21,15 @@ public class Solution implements Comparable<Solution> {
         this.resourceCache = new HashMap<>();
 
         update();
+    }
+
+    public Solution(Map<Truck, List<INode>> routes, Customer depot, Map<Truck, List<TruckResourceCache>> resourceCache, boolean isFeasible, double objective) {
+        this.routes = routes;
+        this.depot = depot;
+
+        this.resourceCache = resourceCache;
+        this.isFeasible = isFeasible;
+        this.objective = objective;
     }
 
     public void calculateObjective() {
@@ -49,54 +59,69 @@ public class Solution implements Comparable<Solution> {
         Map<Truck, List<INode>> clonedRoutes = this.routes.entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, kvp -> new LinkedList<>(kvp.getValue())));
 
-        return new Solution(clonedRoutes, this.depot);
+        Map<Truck, List<TruckResourceCache>> clonedResourceCache = this.resourceCache.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, kvp -> new LinkedList<>(kvp.getValue())));
+        return new Solution(clonedRoutes, this.depot, clonedResourceCache, this.isFeasible, this.objective);
     }
 
-    private void calculateResourceCache(){
-        this.routes.keySet().forEach(truck -> this.resourceCache.put(truck, new LinkedList<>()));
+    private void calculateResourceCache(Truck truck){
+        var route = this.routes.get(truck);
 
-        for (var kvp : this.routes.entrySet()) {
-            var truck = kvp.getKey();
-            var route = kvp.getValue();
-
-            double batteryLevel = truck.batteryCapacity();
-            double remainingCapacity = truck.capacity();
-            INode currentNode = this.depot;
-            for (var node : route) {
-                if (node instanceof Customer customer){
-                    var consumption = truck.batteryConsumption(currentNode.distanceTo(customer));
-                    batteryLevel -= consumption;
-                    remainingCapacity -= customer.demand();
-                }
-                else {
-                    batteryLevel = truck.batteryCapacity();
-                }
-
-                this.resourceCache.get(truck)
-                        .add(new TruckResourceCache(truck, node, batteryLevel, remainingCapacity));
-                currentNode = node;
+        double batteryLevel = truck.batteryCapacity();
+        double remainingCapacity = truck.capacity();
+        INode currentNode = this.depot;
+        for (var node : route) {
+            if (node instanceof Customer customer){
+                var consumption = truck.batteryConsumption(currentNode.distanceTo(customer));
+                batteryLevel -= consumption;
+                remainingCapacity -= customer.demand();
             }
+            else {
+                batteryLevel = truck.batteryCapacity();
+            }
+
+            this.resourceCache.get(truck)
+                    .add(new TruckResourceCache(truck, node, batteryLevel, remainingCapacity));
+            currentNode = node;
         }
     }
 
-    public boolean isFeasible(){
-        return checkBatteryFeasibility() && checkCapacityFeasibility();
+    private void calculateResourceCache(){
+        for (var truck : this.routes.keySet()) {
+            this.resourceCache.put(truck, new LinkedList<>());
+            calculateResourceCache(truck);
+        }
+    }
+    private void calculateResourceCache(Truck... trucks){
+        for (var truck : trucks) {
+            this.resourceCache.put(truck, new LinkedList<>());
+            calculateResourceCache(truck);
+        }
     }
 
-    private boolean checkBatteryFeasibility(){
-        return resourceCache.values().stream()
-                .flatMap(List::stream)
-                .allMatch(cache -> cache.batteryAtNode() >= 0);
+    private boolean isFeasible(){
+        return this.routes.keySet().stream()
+                .allMatch(this::isFeasible);
     }
 
-    private boolean checkCapacityFeasibility(){
-        return resourceCache.values().stream()
-                .flatMap(List::stream)
-                .allMatch(cache -> cache.capacityAfterServingNode() >= 0);
+    private boolean isFeasible(Truck... truck){
+        return List.of(truck).stream()
+                .allMatch(this::isFeasible);
+    }
+
+    private boolean isFeasible(Truck truck){
+        return resourceCache.get(truck).stream()
+                .allMatch(cache -> cache.batteryAtNode() >= 0 && cache.capacityAfterServingNode() >= 0);
     }
 
     public void update(){
         calculateResourceCache();
         calculateObjective();
+        this.isFeasible = isFeasible();
+    }
+    public void update(Truck... trucks){
+        calculateResourceCache(trucks);
+        calculateObjective();
+        this.isFeasible = isFeasible(trucks);
     }
 }

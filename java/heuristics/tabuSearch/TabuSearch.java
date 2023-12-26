@@ -32,7 +32,8 @@ public class TabuSearch {
         int iteration = 0;
         while (iteration < maxIteration) {
             var neighbors = getNeighbors(this.currentState);
-            var admissibleNeighbors = neighbors.stream().filter(neighbor -> isAdmissible(neighbor.solution(), neighbor.move())).toList();
+            var admissibleNeighbors = neighbors.stream()
+                    .filter(neighbor -> isAdmissible(neighbor.solution(), neighbor.move())).toList();
             var bestNeighbor = admissibleNeighbors.stream().min(Neighbor::compareTo).orElse(null);
 
 
