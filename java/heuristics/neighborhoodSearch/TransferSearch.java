@@ -47,7 +47,13 @@ public class TransferSearch extends BaseNeighborhoodSearch {
         newSolution.routes.get(fromTruck).remove(node);
         newSolution.routes.get(toTruck).add(toIndex, node);
 
-        newSolution.update(fromTruck, toTruck);
+        if (newSolution.routes.get(fromTruck).isEmpty()) {
+            newSolution.routes.remove(fromTruck);
+            newSolution.update(toTruck);
+        }
+        else {
+            newSolution.update(fromTruck, toTruck);
+        }
         return newSolution;
     }
 }
