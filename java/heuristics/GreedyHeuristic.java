@@ -40,7 +40,6 @@ public class GreedyHeuristic {
         var minDemand = unvisitedCustomers.stream().mapToDouble(Customer::demand).min().orElse(0);
 
         INode prevNode = problemData.depot;
-        route.add(prevNode);
         while (remainingCapacity >= minDemand) {
             INode nextNode = findClosestNodeWithSmallEnoughDemand(
                     prevNode,
@@ -68,7 +67,6 @@ public class GreedyHeuristic {
         if (!doesSurvive(route.get(route.size() - 1), problemData.depot, truck, currentBattery)) {
             route.add(getClosestStation(route.get(route.size() - 1)));
         }
-        route.add(problemData.depot);
 
         return route;
     }

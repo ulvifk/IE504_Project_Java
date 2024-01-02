@@ -1,3 +1,5 @@
+package heuristics.simulatedAnnealing;
+
 import heuristics.Solution;
 import data.INode;
 import data.Truck;
@@ -15,9 +17,6 @@ import java.time.Instant;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 
     public class SimulatedAnnealing {
 
@@ -143,7 +142,7 @@ import java.util.Date;
                         newRoutes.put(randomTruck, route);
                         neighborSolution = new Solution(newRoutes, initSol.depot);
 
-                        isFeasible = neighborSolution.isFeasible();
+                        isFeasible = neighborSolution.isFeasible;
                         
                         if (Duration.between(startTime, Instant.now()).toMinutes() >= 5) {
                             throw new Exception("No feasible neighbor found within 5 minutes.");

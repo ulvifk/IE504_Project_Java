@@ -4,6 +4,7 @@ import data.ProblemData;
 import heuristics.Neighbor;
 import heuristics.neighborhoodSearch.InterSwapSearch;
 import heuristics.neighborhoodSearch.IntraSwapSearch;
+import heuristics.neighborhoodSearch.NDeepSearh;
 import heuristics.neighborhoodSearch.TransferSearch;
 import heuristics.neighborhoodSearch.moves.IMove;
 import heuristics.Solution;
@@ -18,6 +19,9 @@ public class TabuSearch {
     private Solution currentState;
     public Solution bestSolution;
     private List<Tabu> tabuList;
+    private List<Solution> bestSolutions;
+    public TabuKPI tabuKPI;
+    private List<IterationKPI> iterationKPIs;
 
     public TabuSearch(ProblemData problemData, Solution initialSolution, int tabuTenure) {
         this.problemData = problemData;
@@ -25,7 +29,9 @@ public class TabuSearch {
         this.currentState = initialSolution;
         this.bestSolution = initialSolution;
         this.tabuList = new LinkedList<>();
+        this.bestSolutions = new LinkedList<>();
 
+        this.iterationKPIs = new LinkedList<>();
     }
 
     public void solve(int maxIteration){
@@ -44,6 +50,7 @@ public class TabuSearch {
 
             if (isBetter(bestNeighbor.solution())) {
                 this.bestSolution = bestNeighbor.solution();
+                this.bestSolutions.add(this.bestSolution);
 
                 System.out.println("Iteration: " + iteration + " Cost: " + this.bestSolution.objective);
             }
@@ -51,13 +58,47 @@ public class TabuSearch {
             updateTabuList(bestNeighbor);
             this.currentState = bestNeighbor.solution();
 
+            IterationKPI iterationKPI = new IterationKPI(iteration, this.bestSolution.objective, this.currentState.objective);
+            this.iterationKPIs.add(iterationKPI);
             iteration++;
-            System.out.println("Iteration: " + iteration + " Cost: " + this.bestSolution.objective);
+            //System.out.println("Iteration: " + iteration + " Cost: " + this.bestSolution.objective);
         }
+
+        var beforeIntensificationObjective = this.bestSolution.objective;
+
+        System.out.println("Starting NDeepSearch");
+        var bestSols = this.bestSolutions.stream().sorted().limit(10).collect(Collectors.toList());
+        for (var sol : bestSols) {
+            var nDeepSearch = new NDeepSearh(sol, 2);
+            if (nDeepSearch.bestSolution.objective < this.bestSolution.objective) {
+                this.bestSolution = nDeepSearch.bestSolution;
+                System.out.println("NDeepSearch found better solution: " + this.bestSolution.objective);
+            }
+        }
+
+        this.tabuKPI = new TabuKPI(
+                this.problemData.instanceName,
+                this.tabuTenure,
+                maxIteration,
+                beforeIntensificationObjective,
+                this.bestSolution.objective,
+                this.iterationKPIs
+        );
     }
 
 
     private List<Neighbor> getNeighbors(Solution solution) {
+        var randInt = (int) (Math.random() * 3);
+
+        if (randInt == 0) {
+            return new InterSwapSearch(solution).neighbors;
+        }
+        if (randInt == 1) {
+            return new IntraSwapSearch(solution).neighbors;
+        }
+        if (randInt == 2) {
+            return new TransferSearch(solution).neighbors;
+        }
         var interSwapSearch = new InterSwapSearch(solution);
         var intraSwapSearch = new IntraSwapSearch(solution);
         var transferSearch = new TransferSearch(solution);

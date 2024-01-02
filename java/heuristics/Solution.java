@@ -23,11 +23,16 @@ public class Solution implements Comparable<Solution> {
         update();
     }
 
-    public Solution(Map<Truck, List<INode>> routes, Customer depot, Map<Truck, List<TruckResourceCache>> resourceCache, boolean isFeasible, double objective) {
+    public Solution(Map<Truck, List<INode>> routes, Customer depot, boolean isFeasible, double objective) {
         this.routes = routes;
         this.depot = depot;
 
-        this.resourceCache = resourceCache;
+        this.resourceCache = new HashMap<>();
+        for (var truck : this.routes.keySet()) {
+            this.resourceCache.put(truck, new LinkedList<>());
+        }
+
+        calculateResourceCache();
         this.isFeasible = isFeasible;
         this.objective = objective;
     }
@@ -56,16 +61,19 @@ public class Solution implements Comparable<Solution> {
     }
 
     public Solution copy(){
-        Map<Truck, List<INode>> clonedRoutes = this.routes.entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, kvp -> new LinkedList<>(kvp.getValue())));
+        Map<Truck, List<INode>> clonedRoutes = new HashMap<>();
 
-        Map<Truck, List<TruckResourceCache>> clonedResourceCache = this.resourceCache.entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, kvp -> new LinkedList<>(kvp.getValue())));
-        return new Solution(clonedRoutes, this.depot, clonedResourceCache, this.isFeasible, this.objective);
+        for (var truck : this.routes.keySet()) {
+            var route = this.routes.get(truck);
+            clonedRoutes.put(truck, new LinkedList<>(route));
+        }
+
+        return new Solution(clonedRoutes, this.depot, this.isFeasible, this.objective);
     }
 
     private void calculateResourceCache(Truck truck){
         var route = this.routes.get(truck);
+        var resourceCache = this.resourceCache.get(truck);
 
         double batteryLevel = truck.batteryCapacity();
         double remainingCapacity = truck.capacity();
@@ -80,8 +88,7 @@ public class Solution implements Comparable<Solution> {
                 batteryLevel = truck.batteryCapacity();
             }
 
-            this.resourceCache.get(truck)
-                    .add(new TruckResourceCache(truck, node, batteryLevel, remainingCapacity));
+            resourceCache.add(new TruckResourceCache(truck, node, batteryLevel, remainingCapacity));
             currentNode = node;
         }
     }

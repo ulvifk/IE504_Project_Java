@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 public class ProblemData {
-
+    public String instanceName;
     public Customer depot;
     public List<Customer> customers;
     public List<Station> stations;
