@@ -21,7 +21,7 @@ public class TabuSearch {
     private List<Tabu> tabuList;
     private List<Solution> bestSolutions;
     public TabuKPI tabuKPI;
-    private List<IterationKPI> iterationKPIs;
+    private List<TabuIterationKPI> iterationKPIs;
 
     public TabuSearch(ProblemData problemData, Solution initialSolution, int tabuTenure) {
         this.problemData = problemData;
@@ -58,7 +58,7 @@ public class TabuSearch {
             updateTabuList(bestNeighbor);
             this.currentState = bestNeighbor.solution();
 
-            IterationKPI iterationKPI = new IterationKPI(iteration, this.bestSolution.objective, this.currentState.objective);
+            TabuIterationKPI iterationKPI = new TabuIterationKPI(iteration, this.bestSolution.objective, this.currentState.objective);
             this.iterationKPIs.add(iterationKPI);
             iteration++;
             //System.out.println("Iteration: " + iteration + " Cost: " + this.bestSolution.objective);
@@ -69,11 +69,11 @@ public class TabuSearch {
         System.out.println("Starting NDeepSearch");
         var bestSols = this.bestSolutions.stream().sorted().limit(10).collect(Collectors.toList());
         for (var sol : bestSols) {
-            var nDeepSearch = new NDeepSearh(sol, 2);
-            if (nDeepSearch.bestSolution.objective < this.bestSolution.objective) {
-                this.bestSolution = nDeepSearch.bestSolution;
-                System.out.println("NDeepSearch found better solution: " + this.bestSolution.objective);
-            }
+            //var nDeepSearch = new NDeepSearh(sol, 2, 10 );
+//            if (nDeepSearch.bestSolution.objective < this.bestSolution.objective) {
+//                this.bestSolution = nDeepSearch.bestSolution;
+//                System.out.println("NDeepSearch found better solution: " + this.bestSolution.objective);
+//            }
         }
 
         this.tabuKPI = new TabuKPI(

@@ -1,6 +1,10 @@
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import data.ProblemData;
 import heuristics.GreedyHeuristic;
 import heuristics.Solution;
+import heuristics.simulatedAnnealing.SimulatedAnhealingKPI;
+import heuristics.simulatedAnnealing.SimulatedAnnealing;
 import heuristics.tabuSearch.TabuKPI;
 import heuristics.tabuSearch.TabuSearch;
 
@@ -16,11 +20,11 @@ public class loopyTheLoopLoop {
         var tabuTenures = new int[]{20};
 
         var tabuKPIs = new LinkedList<TabuKPI>();
-        var problemIndices = new int[]{0};
+        var problemIndices = new int[]{0, 1, 2, 3 ,4};
 
         for (var problemIndex : problemIndices) {
             for (var tabuTenure : tabuTenures) {
-                var tabuSetting = new TabuSetting(tabuTenure, 100);
+                var tabuSetting = new TabuSetting(tabuTenure, 200);
                 var problem = problems.get(problemIndex);
 
                 var tabuKPI = runTabuSearch(problem, tabuSetting);
@@ -29,9 +33,13 @@ public class loopyTheLoopLoop {
         }
 
         writeTabuKPIsToCsv(tabuKPIs, "tabuKPIs.csv");
+        toJson(tabuKPIs, "tabuKPIs.json");
     }
 
+
     private static TabuKPI runTabuSearch(ProblemData problemData, TabuSetting tabuSetting){
+        System.out.println("-----------------------------------------------------------------");
+
         var greedyHeury = new GreedyHeuristic(problemData);
         var initialSolution = greedyHeury.solution;
 
@@ -48,6 +56,16 @@ public class loopyTheLoopLoop {
             out.println(tabuKPI.getRowString());
         }
 
+        out.close();
+    }
+
+    private static void toJson(List<TabuKPI> tabuKPIs, String fileName) throws FileNotFoundException {
+        var gson = new GsonBuilder().setPrettyPrinting().create();
+
+        var json = gson.toJson(tabuKPIs);
+
+        var out = new PrintWriter(fileName);
+        out.println(json);
         out.close();
     }
 }

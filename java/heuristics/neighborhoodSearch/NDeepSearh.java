@@ -12,50 +12,49 @@ public class NDeepSearh{
     private Solution solution;
     public Solution bestSolution;
     private int level;
+    private int searchOverBestN;
 
-    public NDeepSearh(Solution solution, int level) {
+    public NDeepSearh(Solution solution, int level, int searchOverBestN) {
         this.solution = solution;
         this.bestSolution = solution;
         this.level = level;
-        SearchNeighbors();
+        this.searchOverBestN = searchOverBestN;
+        searchNeighbors();
     }
 
-    protected void SearchNeighbors() {
-        var sol = SearchNeighbors(this.solution, 0);
-        if (sol == null) return;
-        if (sol.compareTo(this.bestSolution) < 0) {
-            this.bestSolution = sol;
-        }
-    }
+    private void searchNeighbors(){
+        List<Solution> previousLevelSolutions = new LinkedList<Solution>();
+        List<Solution> currentLevelSolutions = new LinkedList<Solution>();
+        var allSolutions = new LinkedList<Solution>();
+        previousLevelSolutions.add(this.solution);
+        allSolutions.add(this.solution);
 
-    private Solution SearchNeighbors(Solution solution, int level) {
-        if (level == this.level) return null;
-
-        var neighbors = getNeighbors(solution);
-        var solutions = new LinkedList<Solution>(neighbors.stream().map(Neighbor::solution).toList());
-
-        neighbors = neighbors.stream()
-                .sorted(Comparator.comparing(neighbor -> neighbor.solution().objective))
-                .limit(5).toList();
-        for (var neighbor : neighbors) {
-            var sol = SearchNeighbors(neighbor.solution(), level + 1);
-            if (sol == null) sol = neighbor.solution();
-            solutions.add(sol);
+        for (int i = 0; i<level; i++){
+            for (var sol : previousLevelSolutions) {
+                var neighbors = getNeighbors(sol);
+                var solutions = new LinkedList<Solution>(neighbors.stream().map(Neighbor::solution).toList());
+                currentLevelSolutions.addAll(neighbors.stream().map(Neighbor::solution).toList());
+                allSolutions.addAll(solutions);
+            }
+            previousLevelSolutions = currentLevelSolutions;
+            previousLevelSolutions = previousLevelSolutions.stream()
+                    .sorted(Comparator.comparing(sol -> sol.objective))
+                    .limit(searchOverBestN).toList();
+            currentLevelSolutions = new LinkedList<Solution>();
         }
 
-        solutions.addAll(neighbors.stream().map(Neighbor::solution).toList());
-        return solutions.stream().min(Solution::compareTo).orElse(null);
+        this.bestSolution = allSolutions.stream().min(Comparator.comparing(sol -> sol.objective)).orElse(null);
     }
 
     private List<Neighbor> getNeighbors(Solution solution) {
         var neighbors = new LinkedList<Neighbor>();
-        var intraSwapSearch = new IntraSwapSearch(solution);
+        //var intraSwapSearch = new IntraSwapSearch(solution);
         var interSwapSearch = new InterSwapSearch(solution);
-        var transferSearch = new TransferSearch(solution);
+        //var transferSearch = new TransferSearch(solution);
 
-        neighbors.addAll(intraSwapSearch.neighbors);
+        //neighbors.addAll(intraSwapSearch.neighbors);
         neighbors.addAll(interSwapSearch.neighbors);
-        neighbors.addAll(transferSearch.neighbors);
+        //neighbors.addAll(transferSearch.neighbors);
 
         return neighbors;
     }

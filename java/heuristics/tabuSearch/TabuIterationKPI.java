@@ -1,6 +1,6 @@
 package heuristics.tabuSearch;
 
-public record IterationKPI(
+public record TabuIterationKPI(
         int iteration,
         double bestObjective,
         double currentObjective

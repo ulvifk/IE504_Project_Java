@@ -7,7 +7,7 @@ public record TabuKPI(String instance,
                       int maxIteration,
                       double beforeIntensificationObjective,
                       double afterIntensificationObjective,
-                      List<IterationKPI> iterationKPIs) {
+                      List<TabuIterationKPI> iterationKPIs) {
 
     public String getRowString(){
         StringBuilder sb = new StringBuilder();

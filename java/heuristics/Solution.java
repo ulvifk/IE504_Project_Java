@@ -1,11 +1,10 @@
 package heuristics;
 
 import data.*;
+import utils.PipedDeepCopy;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.io.Serializable;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Solution implements Comparable<Solution> {
@@ -18,21 +17,16 @@ public class Solution implements Comparable<Solution> {
     public Solution(Map<Truck, List<INode>> routes, Customer depot) {
         this.routes = routes;
         this.depot = depot;
-        this.resourceCache = new HashMap<>();
+        this.resourceCache = new LinkedHashMap<>();
 
         update();
     }
 
-    public Solution(Map<Truck, List<INode>> routes, Customer depot, boolean isFeasible, double objective) {
+    public Solution(Map<Truck, List<INode>> routes, Map<Truck, List<TruckResourceCache>> resourceCache, Customer depot, boolean isFeasible, double objective) {
         this.routes = routes;
         this.depot = depot;
-
-        this.resourceCache = new HashMap<>();
-        for (var truck : this.routes.keySet()) {
-            this.resourceCache.put(truck, new LinkedList<>());
-        }
-
-        calculateResourceCache();
+        this.resourceCache = new LinkedHashMap<>();
+        
         this.isFeasible = isFeasible;
         this.objective = objective;
     }
@@ -61,14 +55,28 @@ public class Solution implements Comparable<Solution> {
     }
 
     public Solution copy(){
-        Map<Truck, List<INode>> clonedRoutes = new HashMap<>();
 
-        for (var truck : this.routes.keySet()) {
-            var route = this.routes.get(truck);
+        Map<Truck, List<INode>> clonedRoutes = new LinkedHashMap<>();
+        Map<Truck, List<TruckResourceCache>> clonedResourceCache = new LinkedHashMap<>();
+
+        for (var kvp : this.routes.entrySet()) {
+            var truck = kvp.getKey();
+            var route = kvp.getValue();
             clonedRoutes.put(truck, new LinkedList<>(route));
         }
 
-        return new Solution(clonedRoutes, this.depot, this.isFeasible, this.objective);
+        for (var kvp : this.resourceCache.entrySet()) {
+            var truck = kvp.getKey();
+            var resourceCache = kvp.getValue();
+
+            var clonedCache = new LinkedList<TruckResourceCache>();
+            for (var cache : resourceCache) {
+                clonedCache.add(cache.clone());
+            }
+            clonedResourceCache.put(truck, clonedCache);
+        }
+
+        return new Solution(clonedRoutes, resourceCache, this.depot, this.isFeasible, this.objective);
     }
 
     private void calculateResourceCache(Truck truck){

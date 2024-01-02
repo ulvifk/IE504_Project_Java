@@ -13,7 +13,7 @@ public class GreedyHeuristic {
 
     public GreedyHeuristic(ProblemData problemData) {
         this.problemData = problemData;
-        this.routes = new HashMap<>();
+        this.routes = new LinkedHashMap<>();
 
         run();
     }
@@ -52,6 +52,8 @@ public class GreedyHeuristic {
             // If there is no node that can be visited, go to the closest station
             if (nextNode == null) {
                 nextNode = getClosestStation(prevNode);
+                if (nextNode == prevNode) break;
+
                 currentBattery = truck.batteryCapacity();
             } else {
                 unvisitedCustomers.remove(nextNode);
@@ -75,8 +77,8 @@ public class GreedyHeuristic {
         return nodes.stream()
                 .filter(n -> n != node)
                 .filter(n -> n.demand() <= remainingCapacity)
-                .min((n1, n2) -> Double.compare(node.distanceTo(n1), node.distanceTo(n2)))
                 .filter(n -> doesSurvive(n, getClosestStation(n), truck, remainingBattery))
+                .min((n1, n2) -> Double.compare(node.distanceTo(n1), node.distanceTo(n2)))
                 .orElse(null);
     }
 
