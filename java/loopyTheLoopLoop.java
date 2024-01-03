@@ -1,26 +1,28 @@
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import data.ProblemData;
 import heuristics.GreedyHeuristic;
-import heuristics.Solution;
-import heuristics.simulatedAnnealing.SimulatedAnhealingKPI;
 import heuristics.simulatedAnnealing.SimulatedAnnealing;
+import heuristics.simulatedAnnealing.SimulatedAnnealingKPI;
 import heuristics.tabuSearch.TabuKPI;
 import heuristics.tabuSearch.TabuSearch;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.nio.file.Files;
 import java.util.LinkedList;
 import java.util.List;
 
 public class loopyTheLoopLoop {
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws Exception {
         var problems = Main.readJsonFiles("./java/dataset");
+        //tabuLoop(problems);
+        saLoop(problems);
+    }
+
+    private static void tabuLoop(List<ProblemData> problems) throws FileNotFoundException {
         var tabuTenures = new int[]{20};
 
-        var tabuKPIs = new LinkedList<TabuKPI>();
-        var problemIndices = new int[]{0, 1, 2, 3 ,4};
+        var tabuKPIs = new LinkedList<>();
+        var problemIndices = new int[]{0, 1};
 
         for (var problemIndex : problemIndices) {
             for (var tabuTenure : tabuTenures) {
@@ -32,10 +34,43 @@ public class loopyTheLoopLoop {
             }
         }
 
-        writeTabuKPIsToCsv(tabuKPIs, "tabuKPIs.csv");
         toJson(tabuKPIs, "tabuKPIs.json");
     }
 
+    private static void saLoop(List<ProblemData> problems) throws Exception {
+        var temperatures = new int[]{5000};
+        var coolingParameters = new double[]{0.01};
+
+        var saKPIs = new LinkedList<>();
+        var problemIndices = new int[]{0, 1};
+
+        for (var problemIndex : problemIndices) {
+            for (var temperatur : temperatures) {
+                for (var coolingParameter : coolingParameters) {
+                    var saSetting = new SASetting(temperatur, coolingParameter, "geometric", 2, "minT,1");
+                    var problem = problems.get(problemIndex);
+
+                    var saKPI = runSA(problem, saSetting);
+                    saKPIs.add(saKPI);
+                }
+            }
+        }
+
+        toJson(saKPIs, "saKPIs.json");
+    }
+
+    private static SimulatedAnnealingKPI runSA(ProblemData problemData, SASetting saSetting) throws Exception {
+        var greedyHeury = new GreedyHeuristic(problemData);
+        var initialSolution = greedyHeury.solution;
+
+        var simulatedAnnealing = new SimulatedAnnealing(problemData, saSetting.initialTemperature(),
+                saSetting.coolingParameter(), saSetting.coolingMethod(), saSetting.epochLength(),
+                saSetting.terminationCriteria(), initialSolution);
+
+        simulatedAnnealing.run(0, 0);
+
+        return simulatedAnnealing.kpi;
+    }
 
     private static TabuKPI runTabuSearch(ProblemData problemData, TabuSetting tabuSetting){
         System.out.println("-----------------------------------------------------------------");
@@ -59,10 +94,10 @@ public class loopyTheLoopLoop {
         out.close();
     }
 
-    private static void toJson(List<TabuKPI> tabuKPIs, String fileName) throws FileNotFoundException {
+    private static void toJson(List<Object> kpis, String fileName) throws FileNotFoundException {
         var gson = new GsonBuilder().setPrettyPrinting().create();
 
-        var json = gson.toJson(tabuKPIs);
+        var json = gson.toJson(kpis);
 
         var out = new PrintWriter(fileName);
         out.println(json);

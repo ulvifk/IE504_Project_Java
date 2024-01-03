@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import heuristics.GreedyHeuristic;
+import heuristics.simulatedAnnealing.SimulatedAnnealing;
 import heuristics.tabuSearch.TabuSearch;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -16,28 +18,8 @@ import data.*;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        var problems = readJsonFiles("./java/dataset");
-        var problem = problems.get(0);
-        for(int i =0; i<10; i++){
-            problem = problems.get(i);
-            var greedyHeuristic = new GreedyHeuristic(problem);
-            System.out.println("-----------------------------------------------------------------");
-            System.out.println("started greedy heuristic");
-            greedyHeuristic.run();
-            greedyHeuristic.solution.isFeasible();
-            System.out.println(greedyHeuristic.solution.isFeasible());
-            //var tabuSearch = new TabuSearch(problem, greedyHeuristic.solution, 5);
-            for (int j = 0; j<10; j++){
-                System.out.println("Dataset"+i+", RUN" + j + "...");
-                Solution initialSolution = greedyHeuristic.solution;
-                SimulatedAnnealing SA = new SimulatedAnnealing(50000, 0.01, "geometric", 2, "minT,1", initialSolution);
-                Solution SA_Solution = SA.run(i, j);
-                
-            }
 
-        }
-            }
-
+    }
 
     public static List<ProblemData> readJsonFiles(String directoryPath) {
         List<ProblemData> instances = new ArrayList<>();
@@ -48,10 +30,10 @@ public class Main {
         if (listOfFiles != null) {
             for (File file : listOfFiles) {
                 if (file.isFile() && file.getName().endsWith(".json")) {
-                    System.out.println("on next file");
+                    //System.out.println("on next file");
                     try (FileReader reader = new FileReader(file)) {
                         JSONObject jsonObject = (JSONObject) parser.parse(reader);
-                        ProblemData problemData = createProblemDataFromJSON(jsonObject);
+                        ProblemData problemData = createProblemDataFromJSON(jsonObject, file.getName());
                         instances.add(problemData);
                     } catch (IOException | ParseException e) {
                         e.printStackTrace();
@@ -65,10 +47,11 @@ public class Main {
         return instances;
     }
 
-    private static ProblemData createProblemDataFromJSON(JSONObject jsonObject) {
+    private static ProblemData createProblemDataFromJSON(JSONObject jsonObject, String name) {
         // read json files from the dataset folder and create problem instances
         // OpenAI. (2023). ChatGPT [Large language model]. https://chat.openai.com
         ProblemData problemData = new ProblemData();
+        problemData.instanceName = name;
         JSONObject instance = (JSONObject) jsonObject.get("instance");
         JSONObject network = (JSONObject) instance.get("network");
         JSONArray nodesArray = (JSONArray) network.get("nodes");
@@ -99,7 +82,6 @@ public class Main {
         int truckCostPerKm = 10;
         problemData.truckParameters = new TruckParameters(truckCapacity, truckMaxTravelDistance, truckCostPerKm);
 
-        problemData.reportProblemData();
         return problemData;
     }
 

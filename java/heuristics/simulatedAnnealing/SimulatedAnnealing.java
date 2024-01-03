@@ -1,15 +1,11 @@
 package heuristics.simulatedAnnealing;
 
+import data.ProblemData;
 import heuristics.Solution;
 import data.INode;
 import data.Truck;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.*;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -28,8 +24,12 @@ import java.io.IOException;
         Solution incumbentSolution;
         String terminationCriteria; // minT, 0.1 or maxIt,1000 etc.
         private Random random = new Random();
+        private List<SAIteration> iterations = new LinkedList<>();
+        public SimulatedAnnealingKPI kpi;
+        private ProblemData problemData;
 
-        public SimulatedAnnealing(double initialTemperature, double coolingParameter, String coolingMethod, int epochLength,String terminationCriteria, Solution initialSolution) {
+        public SimulatedAnnealing(ProblemData problemData, double initialTemperature, double coolingParameter, String coolingMethod, int epochLength,String terminationCriteria, Solution initialSolution) {
+            this.problemData = problemData;
             this.initialTemperature = initialTemperature;
             this.coolingParameter = coolingParameter;
             this.coolingMethod = coolingMethod;
@@ -55,6 +55,7 @@ import java.io.IOException;
                 double initialObj = initialSolution.objective;
                // System.out.println("Initial objective:"+ initialObj);
                 while (!checkTerminationCriteria(this.terminationCriteria, temperature, iterNumber)){
+                    var iterationStart = Instant.now();
                     for(int i = 0; i<this.epochLength; i++){
                         incumbentSolution.calculateObjective();
                         double incumbentObj = incumbentSolution.objective;
@@ -72,6 +73,17 @@ import java.io.IOException;
                         }
                     }
                     temperature = updateTemperature(temperature, this.coolingMethod, this.coolingParameter);
+
+                    var iterationEnd = Instant.now();
+
+                    var iteration = new SAIteration(
+                            iterNumber,
+                            temperature,
+                            currentSolution.objective,
+                            incumbentSolution.objective,
+                            Duration.between(iterationStart, iterationEnd).toMillis()
+                            );
+                    this.iterations.add(iteration);
                     iterNumber++;
                 }
                 incumbentSolution.calculateObjective();
@@ -79,6 +91,17 @@ import java.io.IOException;
                 long totalTime = endTime - startTime;
                 writer.write(""+totalTime+"\n");
                 writer.write(""+initialSolution.objective+"\n");
+
+                kpi = new SimulatedAnnealingKPI(
+                        problemData.instanceName,
+                        this.initialTemperature,
+                        this.coolingParameter,
+                        this.coolingMethod,
+                        this.epochLength,
+                        this.terminationCriteria,
+                        incumbentSolution.objective,
+                        totalTime,
+                        this.iterations);
 
               //  System.out.println("I am returning " + incumbentSolution.objective);
                 
@@ -171,8 +194,4 @@ import java.io.IOException;
                 throw new IllegalArgumentException("Invalid termination criteria format, please use minT,value or maxIt,value."); 
             }
         }
-
-        
-
-
     }

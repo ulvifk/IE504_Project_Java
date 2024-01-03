@@ -1,11 +1,7 @@
 package heuristics;
 
 import data.*;
-import utils.PipedDeepCopy;
-
-import java.io.Serializable;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Solution implements Comparable<Solution> {
     public Map<Truck, List<INode>> routes;

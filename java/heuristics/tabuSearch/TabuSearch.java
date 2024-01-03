@@ -22,6 +22,8 @@ public class TabuSearch {
     private List<Solution> bestSolutions;
     public TabuKPI tabuKPI;
     private List<TabuIterationKPI> iterationKPIs;
+    private int noImprovementIterationCount = 0;
+    private boolean isDiversified = false;
 
     public TabuSearch(ProblemData problemData, Solution initialSolution, int tabuTenure) {
         this.problemData = problemData;
@@ -53,6 +55,17 @@ public class TabuSearch {
                 this.bestSolutions.add(this.bestSolution);
 
                 System.out.println("Iteration: " + iteration + " Cost: " + this.bestSolution.objective);
+                noImprovementIterationCount = 0;
+            }
+
+            if (noImprovementIterationCount > 100 && !isDiversified) {
+                System.out.println("Diversifying");
+                var oldObjective = currentState.objective;
+                currentState = Diversification.divesify(currentState);
+                System.out.println("Objective changed from " + oldObjective + " to " + currentState.objective);
+                noImprovementIterationCount = 0;
+                isDiversified = true;
+
             }
 
             updateTabuList(bestNeighbor);
@@ -60,6 +73,8 @@ public class TabuSearch {
 
             TabuIterationKPI iterationKPI = new TabuIterationKPI(iteration, this.bestSolution.objective, this.currentState.objective);
             this.iterationKPIs.add(iterationKPI);
+
+            noImprovementIterationCount++;
             iteration++;
             //System.out.println("Iteration: " + iteration + " Cost: " + this.bestSolution.objective);
         }
@@ -85,7 +100,6 @@ public class TabuSearch {
                 this.iterationKPIs
         );
     }
-
 
     private List<Neighbor> getNeighbors(Solution solution) {
         var randInt = (int) (Math.random() * 3);
