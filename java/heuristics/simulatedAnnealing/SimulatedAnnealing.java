@@ -1,9 +1,13 @@
 package heuristics.simulatedAnnealing;
 
 import data.ProblemData;
+import heuristics.Neighbor;
 import heuristics.Solution;
 import data.INode;
 import data.Truck;
+import heuristics.neighborhoodSearch.InterSwapSearch;
+import heuristics.neighborhoodSearch.IntraSwapSearch;
+import heuristics.neighborhoodSearch.TransferSearch;
 
 import java.util.*;
 
@@ -22,13 +26,15 @@ import java.io.IOException;
         String coolingMethod; // geometric, 
         Solution initialSolution;
         Solution incumbentSolution;
+        Solution bestSolution;
         String terminationCriteria; // minT, 0.1 or maxIt,1000 etc.
-        private Random random = new Random();
+        private Random random;
         private List<SAIteration> iterations = new LinkedList<>();
         public SimulatedAnnealingKPI kpi;
         private ProblemData problemData;
+        private int seed;
 
-        public SimulatedAnnealing(ProblemData problemData, double initialTemperature, double coolingParameter, String coolingMethod, int epochLength,String terminationCriteria, Solution initialSolution) {
+        public SimulatedAnnealing(ProblemData problemData, double initialTemperature, double coolingParameter, String coolingMethod, int epochLength,String terminationCriteria, Solution initialSolution, int seed) {
             this.problemData = problemData;
             this.initialTemperature = initialTemperature;
             this.coolingParameter = coolingParameter;
@@ -37,6 +43,9 @@ import java.io.IOException;
             this.terminationCriteria = terminationCriteria;
             this.initialSolution = initialSolution;
             this.incumbentSolution = initialSolution;
+            this.bestSolution = initialSolution;
+            this.seed = seed;
+            this.random = new Random(seed);
             //System.out.println("Created the SA!");
         }
 
@@ -44,9 +53,9 @@ import java.io.IOException;
         public Solution run(int dataSetNumber, int runNumber) throws Exception{
            // System.out.println("Started run method...");
             long startTime = System.currentTimeMillis();
-            String fileName = "SimulatedAnnealing_dataset_" + dataSetNumber + "_initialT_" + this.initialTemperature +"_epoch_" + this.epochLength + "_run_" + runNumber + ".csv";
+//            String fileName = "SimulatedAnnealing_dataset_" + dataSetNumber + "_initialT_" + this.initialTemperature +"_epoch_" + this.epochLength + "_run_" + runNumber + ".csv";
 
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            try {
                 double temperature = this.initialTemperature;
                 int iterNumber = 0;
                 Solution currentSolution = this.initialSolution;
@@ -60,7 +69,7 @@ import java.io.IOException;
                         incumbentSolution.calculateObjective();
                         double incumbentObj = incumbentSolution.objective;
                         
-                        writer.write(iterNumber + "," + temperature + "," + currentSolution.objective + "," + incumbentSolution.objective + "\n");
+//                        writer.write(iterNumber + "," + temperature + "," + currentSolution.objective + "," + incumbentSolution.objective + "\n");
                         
                         Solution neighborSolution = generateNeighbor("scramble", currentSolution);
                         if (acceptanceCriteria(neighborSolution, currentSolution, temperature)) {
@@ -69,6 +78,9 @@ import java.io.IOException;
                             incumbentSolution.calculateObjective();
                             if (currentSolution.objective < incumbentSolution.objective) {
                                 incumbentSolution = currentSolution.copy();
+                            }
+                            if (currentSolution.objective < bestSolution.objective) {
+                                bestSolution = currentSolution.copy();
                             }
                         }
                     }
@@ -89,17 +101,19 @@ import java.io.IOException;
                 incumbentSolution.calculateObjective();
                 long endTime = System.currentTimeMillis();
                 long totalTime = endTime - startTime;
-                writer.write(""+totalTime+"\n");
-                writer.write(""+initialSolution.objective+"\n");
+//                writer.write(""+totalTime+"\n");
+//                writer.write(""+initialSolution.objective+"\n");
 
                 kpi = new SimulatedAnnealingKPI(
                         problemData.instanceName,
+                        this.seed,
                         this.initialTemperature,
                         this.coolingParameter,
                         this.coolingMethod,
                         this.epochLength,
                         this.terminationCriteria,
                         incumbentSolution.objective,
+                        bestSolution.objective,
                         totalTime,
                         this.iterations);
 
@@ -176,6 +190,20 @@ import java.io.IOException;
 
             } else{
                 throw new Exception("Please give one of these moves: scramble,");
+            }
+        }
+
+        private Solution getNeighbor(Solution solution){
+            var randInt = this.random.nextInt(0, 3);
+
+            if (randInt == 0) {
+                return new TransferSearch(solution, true, seed).neighbors.get(0).solution();
+            }
+            if (randInt == 1) {
+                return new InterSwapSearch(solution, true, seed).neighbors.get(0).solution();
+            }
+            else {
+                return new IntraSwapSearch(solution, true, seed).neighbors.get(0).solution();
             }
         }
 

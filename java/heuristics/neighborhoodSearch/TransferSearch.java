@@ -5,12 +5,19 @@ import heuristics.Solution;
 import heuristics.neighborhoodSearch.moves.IMove;
 import heuristics.neighborhoodSearch.moves.TransferMove;
 
+import java.util.Collections;
+import java.util.Random;
+
 
 public class TransferSearch extends BaseNeighborhoodSearch {
+    private Random random;
 
-    public TransferSearch(Solution solution) {
+    public TransferSearch(Solution solution, boolean isRandom, int seed) {
         super(solution);
-        SearchNeighbors();
+
+        if (!isRandom) SearchNeighbors();
+        else searchNeighborsRandom();
+        this.random = new Random(seed);
     }
 
     protected void SearchNeighbors() {
@@ -32,6 +39,28 @@ public class TransferSearch extends BaseNeighborhoodSearch {
                     }
                 }
             }
+        }
+    }
+
+    private void searchNeighborsRandom(){
+        while (true){
+            var truck1 = this.solution.routes.keySet().stream().toList().get(random.nextInt(this.solution.routes.size()));
+            var route1 = this.solution.routes.get(truck1);
+
+            var truck2 = this.solution.routes.keySet().stream().toList().get(random.nextInt(this.solution.routes.size()));
+            var route2 = this.solution.routes.get(truck2);
+
+            var node = route1.get(random.nextInt(route1.size()));
+
+            var i = random.nextInt(route2.size() + 1);
+
+            if (truck1 == truck2) continue;
+
+            var move = new TransferMove(truck1, truck2, node, i);
+            var newSolution = applyMove(move);
+            if (!newSolution.isFeasible) continue;
+
+            this.neighbors.add(new Neighbor(newSolution, move));
         }
     }
 

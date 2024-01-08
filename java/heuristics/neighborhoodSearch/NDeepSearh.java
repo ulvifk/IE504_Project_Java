@@ -7,18 +7,22 @@ import heuristics.neighborhoodSearch.moves.IMove;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 public class NDeepSearh{
     private Solution solution;
     public Solution bestSolution;
     private int level;
     private int searchOverBestN;
+    private boolean isRandomized = true;
+    private Random random;
 
-    public NDeepSearh(Solution solution, int level, int searchOverBestN) {
+    public NDeepSearh(Solution solution, int level, int searchOverBestN, int seed) {
         this.solution = solution;
         this.bestSolution = solution;
         this.level = level;
         this.searchOverBestN = searchOverBestN;
+        this.random = new Random(seed);
         searchNeighbors();
     }
 
@@ -47,15 +51,16 @@ public class NDeepSearh{
     }
 
     private List<Neighbor> getNeighbors(Solution solution) {
-        var neighbors = new LinkedList<Neighbor>();
-        //var intraSwapSearch = new IntraSwapSearch(solution);
-        var interSwapSearch = new InterSwapSearch(solution);
-        //var transferSearch = new TransferSearch(solution);
+        var randInt = this.random.nextInt(0, 3);
 
-        //neighbors.addAll(intraSwapSearch.neighbors);
-        neighbors.addAll(interSwapSearch.neighbors);
-        //neighbors.addAll(transferSearch.neighbors);
+        if (randInt == 0) {
+            return new TransferSearch(solution, false, 0).neighbors;
+        }
+        if (randInt == 1) {
+            return new InterSwapSearch(solution, false, 0).neighbors;
+        } else {
+            return new IntraSwapSearch(solution, false, 0).neighbors;
+        }
 
-        return neighbors;
     }
 }

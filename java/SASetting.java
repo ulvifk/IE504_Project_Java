@@ -1,4 +1,5 @@
 public record SASetting (
+        int seed,
         double initialTemperature,
         double coolingParameter,
         String coolingMethod,

@@ -6,13 +6,18 @@ import heuristics.neighborhoodSearch.moves.IMove;
 import heuristics.neighborhoodSearch.moves.InterSwapMove;
 
 import java.util.Collections;
+import java.util.Random;
 
 
 public class InterSwapSearch extends BaseNeighborhoodSearch {
+    private Random random;
 
-    public InterSwapSearch(Solution solution) {
+    public InterSwapSearch(Solution solution, boolean isRandom, int seed) {
         super(solution);
-        SearchNeighbors();
+        this.random = new Random(seed);
+
+        if (!isRandom) SearchNeighbors();
+        else searchNeighborsRandom();
     }
 
     protected void SearchNeighbors() {
@@ -34,6 +39,28 @@ public class InterSwapSearch extends BaseNeighborhoodSearch {
                     }
                 }
             }
+        }
+    }
+
+    private void searchNeighborsRandom(){
+        while (true){
+            var truck1 = this.solution.routes.keySet().stream().toList().get(random.nextInt(this.solution.routes.size()));
+            var route = this.solution.routes.get(truck1);
+
+            var node1 = route.get(random.nextInt(route.size()));
+
+            var truck2 = this.solution.routes.keySet().stream().toList().get(random.nextInt(this.solution.routes.size()));
+            var route2 = this.solution.routes.get(truck2);
+
+            var node2 = route2.get(random.nextInt(route2.size()));
+
+            if (truck1 == truck2) continue;
+
+            var move = new InterSwapMove(truck1, truck2, node1, node2);
+            var newSolution = applyMove(move);
+            if (!newSolution.isFeasible) continue;
+
+            this.neighbors.add(new Neighbor(newSolution, move));
         }
     }
 

@@ -33,7 +33,7 @@ public class Solution implements Comparable<Solution> {
                 .sum();
     }
 
-    private double calculateRouteCost(Truck truck, List<INode> route) {
+    private double  calculateRouteCost(Truck truck, List<INode> route) {
         double totalDistance = 0;
         for (int i = 0; i < route.size() - 1; i++) {
             totalDistance += route.get(i).distanceTo(route.get(i + 1));
